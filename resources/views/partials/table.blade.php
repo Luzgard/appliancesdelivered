@@ -6,16 +6,19 @@
                 <th>Image</th>
                 <th>Name</th>
                 <th>Price</th>
-                <th>Wish list</th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
             @foreach($products as $product)
                 <tr>
-                    <td><img src="{{ $product->image }}" class="img-responsive" alt="{{ $product->name }}"></td>
+                    <td><img src="/images/{{ $product->image }}" class="img-responsive" alt="{{ $product->name }}"></td>
                     <td>{{ $product->name }}</td>
-                    <td>{{ $product->price }}</td>
-                    <td><a class="button button-primary" href="/add">Add to wish list</a></td>
+                    <td>{{ $product->amount }}</td>
+                    <td>
+                        <a type="button" class="btn btn-default">
+                            <span class="glyphicon glyphicon-heart" aria-hidden="true"></span>
+                        </a>
                 </tr>
             @endforeach
             </tbody>

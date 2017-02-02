@@ -24,7 +24,6 @@ class ProductTest extends TestCase
         $this->visit('/')
             ->within('#cheapest-products', function() use($cheapest, $expensive){
                 $this->see('Este es el producto mas barato')
-                    ->see('Add to wish list')
                     ->dontSee('Este es el producto mas caro');
             });
 
@@ -47,7 +46,6 @@ class ProductTest extends TestCase
         $this->visit('/')
             ->within('#expensive-products', function() use($cheapest, $expensive){
                 $this->see('Este es el producto mas caro')
-                    ->see('Add to wish list')
                     ->dontSee('Este es el producto mas barato');
             });
 
