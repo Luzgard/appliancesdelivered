@@ -27,6 +27,6 @@ $factory->define(\App\Product::class, function(Faker\Generator $faker){
     return [
         'name' => $faker->sentence(),
         'price' => $faker->numberBetween(100, 1000),
-        'image' => $faker->sentence()
+        'image' => $faker->numberBetween(1, 20) . '.jpg',
     ];
 });
