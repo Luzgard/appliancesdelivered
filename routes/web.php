@@ -26,6 +26,16 @@ Route::get('favorites', [
     'uses' => 'ProductController@favorites'
 ]);
 
+Route::get('profile', [
+    'as' => 'profile',
+    'uses' => 'UserController@edit'
+]);
+
+Route::put('profile', [
+    'as' => 'profile',
+    'uses' => 'UserController@update'
+]);
+
 Auth::routes();
 
 // Route::get('/home', 'HomeController@index');
