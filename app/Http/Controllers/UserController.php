@@ -14,12 +14,12 @@ class UserController extends Controller
 
     public function update(Request $request)
     {
+        $user = auth()->user();
+
         $this->validate($request, [
             'name' => 'required',
-            'email' => 'email|unique'
+            'email' => 'email|required|unique:users,email,'. $user->id
         ]);
-
-        $user = auth()->user();
 
         $user->fill($request->all());
         $user->save();

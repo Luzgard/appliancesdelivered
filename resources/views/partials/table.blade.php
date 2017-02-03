@@ -2,7 +2,7 @@
     <table id="{{ $class }}" class="table table-hover">
         <thead>
         <tr>
-            <th>Image</th>
+            <th>Product</th>
             <th>Name</th>
             <th>Price</th>
             <th></th>
