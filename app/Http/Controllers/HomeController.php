@@ -14,8 +14,15 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $cheapest = Product::orderBy('price', 'ASC')->take(10)->get();
-        $expensive= Product::orderBy('price', 'DESC')->take(10)->get();
+        if ( ! (cache('cheapest') ||  cache('expensive')) ) {
+            $cheapest = Product::orderBy('price', 'ASC')->take(10)->get();
+            $expensive= Product::orderBy('price', 'DESC')->take(10)->get();
+            cache()->put('cheapest', $cheapest, 20);
+            cache()->put('expensive', $expensive, 20);
+        }
+
+        $cheapest = cache('cheapest');
+        $expensive= cache('expensive');
 
         return view('welcome', compact('cheapest', 'expensive'));
     }
