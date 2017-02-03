@@ -24,6 +24,6 @@ class UserController extends Controller
         $user->fill($request->all());
         $user->save();
 
-        return back()->with('success', 'Update data');
+        return back()->with('success', 'Profile updated!');
     }
 }
