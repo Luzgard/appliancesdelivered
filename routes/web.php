@@ -16,25 +16,27 @@ Route::get('/', [
     'uses' => 'HomeController@index'
 ]);
 
-Route::get('favorite/{product}', [
-    'uses' => 'ProductController@favorite',
-    'as' => 'favorite'
-]);
+Route::group(['middleware' => 'auth'], function(){
+    Route::get('favorite/{product}', [
+        'uses' => 'ProductController@favorite',
+        'as' => 'favorite'
+    ]);
 
-Route::get('favorites', [
-    'as' => 'favorites',
-    'uses' => 'ProductController@favorites'
-]);
+    Route::get('favorites', [
+        'as' => 'favorites',
+        'uses' => 'ProductController@favorites'
+    ]);
 
-Route::get('profile', [
-    'as' => 'profile',
-    'uses' => 'UserController@edit'
-]);
+    Route::get('profile', [
+        'as' => 'profile',
+        'uses' => 'UserController@edit'
+    ]);
 
-Route::put('profile', [
-    'as' => 'profile',
-    'uses' => 'UserController@update'
-]);
+    Route::put('profile', [
+        'as' => 'profile',
+        'uses' => 'UserController@update'
+    ]);
+});
 
 Auth::routes();
 

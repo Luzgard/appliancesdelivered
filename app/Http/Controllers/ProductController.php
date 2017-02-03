@@ -10,10 +10,6 @@ class ProductController extends Controller
 {
     public function favorite(Product $product)
     {
-        if( ! Auth::user() ){
-            return redirect('/login');
-        }
-
         $user = Auth::user();
 
         $user->favorites()->toggle($product);
