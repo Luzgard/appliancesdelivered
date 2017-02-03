@@ -21,6 +21,11 @@ Route::get('favorite/{product}', [
     'as' => 'favorite'
 ]);
 
+Route::get('favorites', [
+    'as' => 'favorites',
+    'uses' => 'ProductController@favorites'
+]);
+
 Auth::routes();
 
 // Route::get('/home', 'HomeController@index');

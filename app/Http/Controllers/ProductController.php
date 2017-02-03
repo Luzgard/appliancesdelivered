@@ -20,4 +20,10 @@ class ProductController extends Controller
 
         return back()->with('success', 'Add new product to wish list');
     }
+
+    public function favorites(){
+        $favorites = auth()->user()->favorites;
+
+        return view('favorites', compact('favorites'));
+    }
 }

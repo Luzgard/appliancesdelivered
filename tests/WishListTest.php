@@ -98,4 +98,26 @@ class WishListTest extends TestCase
         $this->seePageIs('/login');
     }
 
+    public function test_show_favorites_list()
+    {
+        $product = factory(Product::class)->create([
+            'name' => 'This is one of my favorites'
+        ]);
+
+        $otherProduct = factory(Product::class)->create([
+            'name' => 'This is no one of my favorites'
+        ]);
+
+        $user = factory(User::class)->create();
+
+        $user->favorites()->toggle($product);
+
+        $this->actingAs($user)
+            ->visit('/')
+            ->click('Favorites')
+            ->seePageIs('favorites')
+            ->see('This is one of my favorites')
+            ->dontSee('This is no one of my favorites');
+    }
+
 }
