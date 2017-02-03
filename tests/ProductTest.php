@@ -49,4 +49,31 @@ class ProductTest extends TestCase
                     ->dontSee('Cheapest product');
             });
     }
+
+    public function test_list_all_products()
+    {
+        $product = factory(Product::class)->create([
+            'name' => 'This is a product'
+        ]);
+
+        $this->visit('/')
+            ->see('Products')
+            ->click('Products');
+
+        $this->seePageIs('products')
+            ->see('This is a product');
+    }
+
+    public function test_see_products_title()
+    {
+        $user = factory(User::class)->create();
+
+        $this->actingAs($user)
+            ->visit('/')
+            ->click('Products')
+            ->seePageIs('products')
+            ->within('#list', function ()  {
+                $this->seeInElement('h3', 'Products');
+            });
+    }
 }

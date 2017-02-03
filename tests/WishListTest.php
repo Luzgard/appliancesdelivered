@@ -120,4 +120,17 @@ class WishListTest extends TestCase
             ->dontSee('This is no one of my favorites');
     }
 
+    public function test_see_favorite_title()
+    {
+        $user = factory(User::class)->create();
+
+        $this->actingAs($user)
+            ->visit('/')
+            ->click('Favorites')
+            ->seePageIs('favorites')
+            ->within('#list', function ()  {
+                $this->seeInElement('h3', 'Favorites');
+            });
+    }
+
 }

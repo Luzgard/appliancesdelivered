@@ -16,6 +16,11 @@ Route::get('/', [
     'uses' => 'HomeController@index'
 ]);
 
+Route::get('products', [
+    'as' => 'products',
+    'uses' => 'ProductController@index'
+]);
+
 Route::group(['middleware' => 'auth'], function(){
     Route::get('favorite/{product}', [
         'uses' => 'ProductController@favorite',

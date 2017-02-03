@@ -9,6 +9,17 @@ use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
+    public function index()
+    {
+        if ( !cache('products') ) {
+            $products = Product::all();
+            cache()->put('products', $products, 20);
+        }
+        $products = cache('products');
+
+        return view('list', compact('products'));
+    }
+
     public function favorite(Product $product)
     {
         $user = Auth::user();
@@ -20,9 +31,9 @@ class ProductController extends Controller
     }
 
     public function favorites(){
-        $favorites = auth()->user()->favorites;
+        $products = auth()->user()->favorites;
 
-        return view('favorites', compact('favorites'));
+        return view('list', compact('products'));
     }
 
     public function successMessage(User $user, Product $product)
