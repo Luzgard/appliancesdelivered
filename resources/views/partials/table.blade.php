@@ -16,8 +16,8 @@
                     <td>{{ $product->name }}</td>
                     <td>{{ $product->amount }}</td>
                     <td>
-                        <a type="button" class="btn btn-default">
-                            <span class="glyphicon glyphicon-heart" aria-hidden="true"></span>
+                        <a href="{{ route('favorite', ['id' => $product->id]) }}" type="button" name="favorite-icon" class="btn btn-default">
+                            <span class="glyphicon {{ $product->favoriteClass }}" aria-hidden="true"></span>
                         </a>
                 </tr>
             @endforeach

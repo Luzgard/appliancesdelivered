@@ -26,4 +26,16 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function favorites()
+    {
+        return $this->belongsToMany(Product::class, 'favorites');
+    }
+
+    public function isFavorite(Product $product)
+    {
+        return $this->favorites()
+            ->where('favorites.product_id', $product->id)
+            ->exists();
+    }
 }

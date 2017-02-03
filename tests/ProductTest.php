@@ -1,6 +1,7 @@
 <?php
 
 use App\Product;
+use App\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class ProductTest extends TestCase
@@ -12,21 +13,20 @@ class ProductTest extends TestCase
         factory(Product::class)->times(10)->create();
 
         $cheapest = factory(Product::class)->create([
-            'name' => 'Este es el producto mas barato',
+            'name' => 'Cheapest product',
             'price' => '50'
         ]);
 
         $expensive = factory(Product::class)->create([
-            'name' => 'Este es el producto mas caro',
+            'name' => 'More expensive product',
             'price' => '1001'
         ]);
 
         $this->visit('/')
             ->within('#cheapest-products', function() use($cheapest, $expensive){
-                $this->see('Este es el producto mas barato')
-                    ->dontSee('Este es el producto mas caro');
+                $this->see('Cheapest product')
+                    ->dontSee('More expensive product');
             });
-
     }
 
     public function test_list_more_expensive_products()
@@ -34,21 +34,19 @@ class ProductTest extends TestCase
         factory(Product::class)->times(10)->create();
 
         $cheapest = factory(Product::class)->create([
-            'name' => 'Este es el producto mas barato',
+            'name' => 'Cheapest product',
             'price' => '50'
         ]);
 
         $expensive = factory(Product::class)->create([
-            'name' => 'Este es el producto mas caro',
+            'name' => 'More expensive product',
             'price' => '1001'
         ]);
 
         $this->visit('/')
             ->within('#expensive-products', function() use($cheapest, $expensive){
-                $this->see('Este es el producto mas caro')
-                    ->dontSee('Este es el producto mas barato');
+                $this->see('More expensive product')
+                    ->dontSee('Cheapest product');
             });
-
     }
-
 }
