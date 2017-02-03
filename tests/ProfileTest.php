@@ -7,6 +7,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 class ProfileTest extends TestCase
 {
     use DatabaseTransactions;
+
     public function test_update_profile()
     {
         $user = factory(\App\User::class)->create([
@@ -43,5 +44,20 @@ class ProfileTest extends TestCase
             ->press('Update');
 
         $this->see('The email must be a valid email address.');
+    }
+
+    public function test_register_user()
+    {
+        $this->visit('register')
+            ->type('Antonio Rosado', 'name')
+            ->type('antonio@gmail.com', 'email')
+            ->type('secret', 'password')
+            ->type('secret', 'password_confirmation')
+            ->press('Register');
+
+        $this->seeInDatabase('users', [
+            'name' => 'Antonio Rosado',
+            'email' => 'antonio@gmail.com',
+        ]);
     }
 }
