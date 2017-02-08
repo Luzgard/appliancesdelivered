@@ -3,29 +3,32 @@
 namespace App\Http\Controllers;
 
 use App\Product;
+use App\Repositories\ProductRepository;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
+
+    protected $productRepository;
+
+    public function __construct(ProductRepository $productRepository)
+    {
+        $this->productRepository = $productRepository;
+    }
+
     public function index()
     {
-        if ( !cache('products') ) {
-            $products = Product::all();
-            cache()->put('products', $products, 20);
-        }
-        $products = cache('products');
-
+        $products = $this->productRepository->all();
         return view('list', compact('products'));
     }
 
     public function favorite(Product $product)
     {
-        $user = Auth::user();
-        $user->favorites()->toggle($product);
+        auth()->user()->favorites()->toggle($product);
 
-        $message = $this->successMessage($user, $product);
+        $message = $this->successMessage(auth()->user(), $product);
 
         return back()->with('success', $message);
     }

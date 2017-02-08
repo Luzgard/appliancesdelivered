@@ -3,10 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Product;
+use App\Repositories\ProductRepository;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
+    protected $productRepository;
+
+    public function __construct(ProductRepository $productRepository)
+    {
+        $this->productRepository = $productRepository;
+    }
     /**
      * Show the application home.
      *
@@ -14,15 +21,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        if ( ! (cache('cheapest') ||  cache('expensive')) ) {
-            $cheapest = Product::orderBy('price', 'ASC')->take(10)->get();
-            $expensive= Product::orderBy('price', 'DESC')->take(10)->get();
-            cache()->put('cheapest', $cheapest, 20);
-            cache()->put('expensive', $expensive, 20);
-        }
-
-        $cheapest = cache('cheapest');
-        $expensive= cache('expensive');
+        $cheapest = $this->productRepository->cheapest();
+        $expensive = $this->productRepository->expensive();
 
         return view('welcome', compact('cheapest', 'expensive'));
     }
