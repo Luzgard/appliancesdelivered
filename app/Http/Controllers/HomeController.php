@@ -22,7 +22,7 @@ class HomeController extends Controller
     public function index()
     {
         $cheapest = $this->productRepository->cheapest();
-        $expensive = $this->productRepository->expensive();
+        $expensive = $this->productRepository->mostExpensive();
 
         return view('welcome', compact('cheapest', 'expensive'));
     }

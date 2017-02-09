@@ -11,7 +11,7 @@
         <tbody>
         @foreach($products as $product)
             <tr>
-                <td><img src="/images/{{ $product->image }}" class="img-responsive" alt="{{ $product->name }}"></td>
+                <td><img src="{{ $product->image }}" class="img-responsive" alt="{{ $product->name }}"></td>
                 <td>{{ $product->name }}</td>
                 <td>{{ $product->amount }}</td>
                 <td>

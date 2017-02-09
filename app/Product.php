@@ -7,9 +7,21 @@ use Illuminate\Support\Facades\Auth;
 
 class Product extends Model
 {
+    protected $fillable = [
+        'name',
+        'image',
+        'price'
+    ];
+
+
+    public function setPriceAttribute($value)
+    {
+        $this->attributes['price'] = str_replace(array('€', '&euro;', ','),'',$value);
+    }
+
     public function getAmountAttribute()
     {
-        return '$'.$this->price/100;
+        return '&euro;'.number_format($this->price, 2);
     }
 
     public function getFavoriteClassAttribute()
