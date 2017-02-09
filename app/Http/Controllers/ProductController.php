@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Product;
+use App\Repositories\MessageRepository;
 use App\Repositories\ProductRepository;
 use App\User;
 use Illuminate\Http\Request;
@@ -12,10 +13,12 @@ class ProductController extends Controller
 {
 
     protected $productRepository;
+    protected $messageRepository;
 
-    public function __construct(ProductRepository $productRepository)
+    public function __construct(ProductRepository $productRepository, MessageRepository $messageRepository)
     {
         $this->productRepository = $productRepository;
+        $this->messageRepository = $messageRepository;
     }
 
     public function index()
@@ -27,26 +30,11 @@ class ProductController extends Controller
     public function favorite(Product $product)
     {
         auth()->user()->favorites()->toggle($product);
-
-        $message = $this->successMessage(auth()->user(), $product);
-
-        return back()->with('success', $message);
+        return back()->with('success', $this->messageRepository->successMessage($product));
     }
 
     public function favorites(){
         $products = auth()->user()->favorites;
-
         return view('list', compact('products'));
-    }
-
-    public function successMessage(User $user, Product $product)
-    {
-        $message = 'Delete product to your wish list';
-
-        if($user->isFavorite($product)){
-            $message = 'Add product to your wish list';
-        }
-
-        return $message;
     }
 }
