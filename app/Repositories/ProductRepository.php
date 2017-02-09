@@ -66,7 +66,7 @@ class ProductRepository
     public function storeOrUpdate($product)
     {
         $current = Product::where('name', $product['name'])->first();
-        if( !$current->exists() ){
+        if( empty($current) ){
             Product::create($product);
         }else{
             $this->dataRepository->hasChanged($current, $product);
