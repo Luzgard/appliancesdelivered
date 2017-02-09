@@ -3,10 +3,17 @@
 namespace App\Repositories;
 
 use App\Product;
-use PHPHtmlParser\Dom;
 
 class ProductRepository
 {
+    protected $dataRepository;
+    protected $selector = '.search-results-product';
+
+    public function __construct(DataRepository $dataRepository)
+    {
+        $this->dataRepository = $dataRepository;
+    }
+
     public function cheapest()
     {
         if ( !cache('cheapest') ) {
@@ -23,12 +30,6 @@ class ProductRepository
         return cache('most_expensive');
     }
 
-    public function top($order, $take, $url)
-    {
-        $this->getProductsByUrl($url);
-        return Product::orderBy('price', $order)->take($take)->get();
-    }
-
     public function all()
     {
         if ( !cache('products') ) {
@@ -38,44 +39,37 @@ class ProductRepository
         return cache('products');
     }
 
-    public function getProductsByUrl($url)
+    public function top($order, $take, $url)
     {
-        $products = $this->getProductsBySelector($url, '.search-results-product');
+        $this->storeProductsByUrl($url, $this->selector);
+        return Product::orderBy('price', $order)->take($take)->get();
+    }
 
+    public function storeProductsByUrl($url, $selector)
+    {
+        $products = $this->dataRepository->getData($url, $selector);
+        $this->storeProducts($products);
+    }
+
+    public function storeProducts($products)
+    {
         foreach($products as $product){
-            $current = [
+            $item = [
                 'name' => $product->find('h4')->find('a')[0]->text,
                 'image' => $product->find('.img-responsive')->src,
                 'price' => $product->find('h3')->text
             ];
-
-            $exist = Product::where('name', $current['name'])->first();
-            // Not exist
-            if( !$exist->exists() ){
-                // Create this one cuz is one of the top
-                Product::create($current);
-            }else{
-                // If exist validate that is the same, cuz it could change one of its values
-                if ( $exist->name != $current['name']  || $exist->image != $current['image'] || $exist->price != str_replace(array('€', '&euro;', ','),'',$current['price'])){
-                    // If some of them change, it must update data
-                    $exist->name = $current['name'];
-                    $exist->price = $current['price'];
-                    $exist->image = $current['image'];
-
-                    $exist->save();
-                }
-            }
+            $this->storeOrUpdate($item);
         }
-
-        // todo Delete all no existing elements now
-
     }
 
-    public function getProductsBySelector($url, $selector)
+    public function storeOrUpdate($product)
     {
-        $baseUrl = 'https://www.appliancesdelivered.ie/search';
-        $dom = new Dom();
-        $dom->load($baseUrl.$url);
-        return $dom->find($selector);
+        $current = Product::where('name', $product['name'])->first();
+        if( !$current->exists() ){
+            Product::create($product);
+        }else{
+            $this->dataRepository->hasChanged($current, $product);
+        }
     }
 }

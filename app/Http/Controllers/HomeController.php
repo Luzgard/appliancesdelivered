@@ -14,11 +14,7 @@ class HomeController extends Controller
     {
         $this->productRepository = $productRepository;
     }
-    /**
-     * Show the application home.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
         $cheapest = $this->productRepository->cheapest();
